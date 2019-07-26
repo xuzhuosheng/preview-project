@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>Wopop</title>
+    <!--<link href="./Wopop_files/style_log.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../Wopop_files/style.css">
+    <link rel="stylesheet" type="text/css" href="../Wopop_files/userpanel.css">
+    <link rel="stylesheet" type="text/css" href="../Wopop_files/jquery.ui.all.css">
+
+    <script type="text/javascript" src="./js/jquery-3.3.1.min.js"></script>-->
+    <link rel="stylesheet" type="text/css" th:href="@{Wopop_files/style_log.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{Wopop_files/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{Wopop_files/userpanel.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{Wopop_files/jquery.ui.all.css}">
+    <script type="text/javascript" th:src="@{js/jquery-3.3.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{js/common.js}"></script>
+    <style>
+        .p_font {
+            font-size: 30px;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+        function forgetPassword() {
+            alert("请联系管理员");
+            return;
+        }
+
+
+        //JSON.stringify()
+        function submitForm() {
+            var username = $("#username").val();
+            var password = $("#password").val();
+
+            if (username != "" && password != "") {
+                var form = $("#form");
+                form.submit();
+
+            } else {
+                alert("请输入用户名和密码！");
+                return;
+            }
+
+
+        }
+
+        $(function () {
+            var msg = $("#msgId").val();
+            if (msg != "") {
+                alert(msg);
+            }
+            $("#msgId").val("");
+        })
+    </script>
+</head>
+
+<body class="login" mycollectionplug="bind">
+<input th:value="${msg}" style="display: none" id="msgId">
+<div class="login_m">
+    <div class="login_logo"><!--<img src="./Wopop_files/logo.png" width="196" height="46">-->
+        <p class="p_font">图片管理平台</p>
+    </div>
+    <div class="login_boder">
+
+        <div class="login_padding" id="login_model">
+            <form id="form" method="post" action="/doLogin">
+                <h2>用户名</h2>
+                <label>
+                    <input type="text" id="username" name="username" class="txt_input txt_input2"
+                           placeholder="请输入用户名">
+                </label>
+                <h2>密码</h2>
+                <label>
+                    <input type="password" name="password" id="password" class="txt_input" placeholder="请输入密码">
+                </label>
+
+
+                <p class="forgot"><a id="iforget" href="#" onclick="forgetPassword()">忘记密码?</a></p>
+                <div class="rem_sub">
+                    <div class="rem_sub_l">
+                    </div>
+                    <label>
+                        <input type="button" class="sub_button" name="button" id="button" value="登 录"
+                               style="opacity: 0.7;" onclick="submitForm()">
+                    </label>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<br><br>
+<p align="center">广东天宏通讯科技有限公司 </p>
+
+</body>
+
+</html>

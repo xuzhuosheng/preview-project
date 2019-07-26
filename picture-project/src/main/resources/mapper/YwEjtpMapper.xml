@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pictureproject.dao.YwEjtpDao">
+
+    <select id="getEjtpData" resultType="com.example.pictureproject.entity.YwEjtp">
+        select * from yw_ejtp
+        <where>
+            1=1
+            and yjid=#{yjid}
+            and zdid=#{zdid}
+        </where>
+    </select>
+
+    <insert id="doSaveEjtp">
+        insert into yw_ejtp
+        (yjid,zdid,pname,pdescribe,path,creater,createtime)
+        values
+        (
+        #{yjid},#{zdid},#{pname},#{pdescribe},#{fileName}, #{creater},now()
+        )
+
+    </insert>
+
+    <delete id="doEjtpDel">
+        delete from yw_ejtp
+        <where>
+            id in
+            <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+
+    <!--<insert id="doSavePic">-->
+    <!--insert  into yw_yjtp-->
+    <!--(zdid,pname,pdescribe,path,creater,createtime)values (-->
+    <!--#{zdid},#{pname},#{pdescribe},#{path},#{creater},now()-->
+    <!--)-->
+    <!--</insert>-->
+
+    <!--<delete id="doPicDel">-->
+    <!--delete from yw_yjtp-->
+    <!--<where>-->
+    <!--id in-->
+    <!--<foreach collection="idList" item="id" open="(" close=")" separator=",">-->
+    <!--#{id}-->
+    <!--</foreach>-->
+    <!--</where>-->
+    <!--</delete>-->
+
+    <!--<select id="getYjtpDataById" resultType="com.example.pictureproject.entity.YwYjtp">-->
+    <!--select * from yw_yjtp-->
+    <!--<where>-->
+    <!--1=1-->
+    <!--and id=#{id}-->
+    <!--</where>-->
+    <!--</select>-->
+
+</mapper>

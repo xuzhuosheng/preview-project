@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" th:href="@{hui/huistatic/h-ui/css/H-ui.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{hui/huistatic/h-ui.admin/css/H-ui.admin.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{hui/lib/Hui-iconfont/1.0.8/iconfont.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{hui/huistatic/h-ui.admin/skin/default/skin.css}" id="skin"/>
+    <link rel="stylesheet" type="text/css" th:href="@{hui/huistatic/h-ui.admin/css/style.css}"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+
+    <title>图片展示</title>
+    <link href="lib/lightbox2/2.8.1/css/lightbox.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 图片管理 <span
+        class="c-gray en">&gt;</span> <span th:text="${pname}"></span> <a class="btn btn-success radius r"
+                                                                          style="line-height:1.6em;margin-top:3px"
+                                                                          href="javascript:location.replace(location.href);"
+                                                                          id="reflashAId"
+                                                                          title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+
+    <input type="text" th:value="${yjtpId}" id="yjtpIdInp" style="display: none">
+    <input type="text" th:value="${zdid}" id="zdidInp" style="display: none">
+
+    <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="l"> <a href="javascript:;"
+                                                                onclick="picture_add('添加二级图片','toShowAdd')"
+                                                                class="btn btn-primary radius"><i class="Hui-iconfont">&#xe6df;</i> 添加二级图片</a> <a
+            href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> </span>
+        <span class="r">共有数据：<strong><span th:text="${dataList2.size()}"></span></strong> 条</span></div>
+    <div class="portfolio-content">
+        <ul class="cl portfolio-area">
+
+            <li class="item" th:each="plan:${dataList2}">
+                <div class="portfoliobox">
+                    <input class="checkbox" name="checkboxInp" type="checkbox" th:value="${plan.id}">
+                    <div class="picbox"><a
+                            th:href="@{${headPath}+'yjtp_'+${plan.zdid}+'_'+ ${plan.yjid}+'/'+${plan.path}}"
+                            data-lightbox="gallery" th:title="${plan.pdescribe}"><img
+                            th:src="@{${headPath}+'yjtp_'+${plan.zdid}+'_'+ ${plan.yjid}+'/'+${plan.path}}"></a></div>
+                    <div class="textbox"><span th:text="${plan.pname}"></span></div>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" th:src="@{hui/lib/jquery/1.9.1/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{hui/lib/layer/2.4/layer.js}"></script>
+<script type="text/javascript" th:src="@{hui/huistatic/h-ui/js/H-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{hui/huistatic/h-ui.admin/js/H-ui.admin.js}"></script>
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:src="@{hui/lib/lightbox2/2.8.1/js/lightbox.min.js}"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".portfolio-area li").Huihover();
+    });
+
+
+    /*图片-添加*/
+    function picture_add(title, url) {
+        var yjtpId = $("#yjtpIdInp").val();
+        var zdid = $("#zdidInp").val();
+        var index = layer.open({
+                type: 2,
+                title: title,
+                content: url + "?yjtpId=" + yjtpId + "&zdid=" + zdid
+            })
+        ;
+        layer.full(index);
+    }
+
+
+    function datadel() {
+        var obj = $("input[name='checkboxInp']:checked");
+        var ids = "";
+        if (obj.length > 0) {
+            for (var i = 0; i < obj.length; i++) {
+                ids += obj[i].value + ",";
+            }
+
+        } else {
+            alert("请选择记录！");
+            return;
+        }
+        ids = ids.substring(0, ids.length - 1);
+
+        layer.confirm('确认要删除吗？', function (index) {
+            $.ajax({
+                type: 'POST',
+                url: 'doEjtpDel',
+                data: {ids: ids},
+                dataType: 'json',
+                success: function (data) {
+                    var d = eval(data);
+                    if (d.flag == "success") {
+                        alert(d.msg);
+                        layer.msg('已删除!', {icon: 1, time: 1000});
+                        document.getElementById("reflashAId").click();
+
+                    } else {
+                        alert(d.msg);
+                        return;
+                    }
+                }
+            });
+        });
+    }
+
+
+</script>
+</body>
+</html>

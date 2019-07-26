@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pictureproject.dao.YwYjtpDao">
+
+    <select id="getYjtpData" resultType="com.example.pictureproject.entity.YwYjtp">
+        select a.id,a.zdid,a.pname,a.pdescribe,a.path,a.creater,a.createtime,b.sname sname from yw_yjtp a
+        left join yw_zdgl b on a.zdid=b.id
+        <where>
+            1=1
+            and b.sname is not null
+            <if test="searchContent!='' and searchContent!=null">
+                and
+                (
+                a.pname like concat(concat('%',#{searchContent}),'%')
+                or a.pdescribe like concat(concat('%',#{searchContent}),'%')
+                )
+            </if>
+            <if test="zdid!='' and zdid!=null and zdid !=0 ">
+                and a.zdid=#{zdid}
+            </if>
+
+        </where>
+    </select>
+
+    <insert id="doSavePic">
+        insert into yw_yjtp
+        (zdid,pname,pdescribe,path,creater,createtime)values (
+        #{zdid},#{pname},#{pdescribe},#{path},#{creater},now()
+        )
+    </insert>
+
+    <delete id="doPicDel">
+        delete from yw_yjtp
+        <where>
+            id in
+            <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+
+    <select id="getYjtpDataById" resultType="com.example.pictureproject.entity.YwYjtp">
+        select * from yw_yjtp
+        <where>
+            1=1
+            and id=#{id}
+        </where>
+    </select>
+
+</mapper>

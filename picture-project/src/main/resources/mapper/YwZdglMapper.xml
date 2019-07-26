@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pictureproject.dao.YwZdglDao">
+
+    <select id="getZdglData" resultType="com.example.pictureproject.entity.YwZdgl">
+        select * from yw_zdgl
+        <where>
+            1=1
+            <if test="searchContent!='' and searchContent!=null">
+                and (
+                sname like concat(concat('%',#{searchContent}),'%')
+                or sdescribe like concat(concat('%',#{searchContent}),'%')
+                or surl like concat(concat('%',#{searchContent}),'%')
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="getZdglDataById" resultType="com.example.pictureproject.entity.YwZdgl">
+        select * from yw_zdgl
+        <where>
+            1=1
+            and id=#{id}
+        </where>
+    </select>
+
+    <insert id="insertZdgl">
+        insert into yw_zdgl
+        (
+        sname,sdescribe,surl,createtime,createby
+        )values (
+        #{sname},#{sdescribe},#{surl},now(),#{username}
+        )
+    </insert>
+
+    <delete id="delZdgl" parameterType="java.util.List">
+        delete from yw_zdgl
+        <where>
+            id in
+            <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+
+    <update id="UpdateZdgl">
+        update yw_zdgl
+        <set>
+            sname=#{sname},sdescribe=#{sdescribe},surl=#{surl}
+        </set>
+
+        <where>
+            id=#{id}
+        </where>
+    </update>
+</mapper>
