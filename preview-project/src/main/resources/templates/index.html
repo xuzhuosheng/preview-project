@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{lib/swiper/swiper.css}">
+    <link rel="stylesheet" th:href="@{css/public.css}">
+    <link rel="stylesheet" th:href="@{css/page.css}">
+
+</head>
+<body>
+<div class="page">
+
+    <h2 class="page_title">标题</h2>
+    <div class="img_grid grid_2">
+        <a th:each="plan:${ywYjtpList}" th:href="@{'toEjtpIndex?yjid='+${plan.id}+'&zdid='+${plan.zdid} }" >
+            <img th:src="@{${headPath}+${plan.path}}" alt="">
+        </a>
+        <!--<a href="index_1.html"><img th:src="@{images/2.jpg}" alt=""></a>
+        <a href="index_1.html"><img th:src="@{images/3.jpg}" alt=""></a>
+        <a href="index_1.html"><img th:src="@{images/4.jpg}" alt=""></a>
+        <a href="index_1.html"><img th:src="@{images/5.jpg}" alt=""></a>-->
+    </div>
+</div>
+
+
+
+
+<!--轮播图-->
+<div id="slideshow" class="swiper-container">
+    <div class="swiper-wrapper">
+
+    </div>
+    <!-- 如果需要分页器 -->
+    <div class="swiper-pagination"></div>
+
+</div>
+
+</body>
+<script th:src="@{lib/jquery-2.1.4.js}"></script>
+<script th:src="@{lib/fastclick.js}"></script>
+<script th:src="@{lib/swiper/swiper.js}"></script>
+<script th:src="@{js/page.js}"></script>
+
+<script>
+    $(function () {
+        FastClick.attach(document.body);
+
+        // 用户长时间未操作 显示轮播
+        var isNotInitSlideshow = true;
+        var slideshowSwiper = {};
+        var slideshowImgSrc = [
+            "images/11.jpg",
+            "images/22.jpg",
+            "images/33.jpg",
+            "images/1.jpg",
+        ];
+        overTime(isNotInitSlideshow,slideshowSwiper,slideshowImgSrc);
+    });
+
+
+</script>
+</html>

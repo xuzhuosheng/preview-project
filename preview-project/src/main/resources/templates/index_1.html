@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <title>Title</title>
+    <link rel="stylesheet" href="lib/swiper/swiper.css">
+    <link rel="stylesheet" href="css/public.css">
+    <link rel="stylesheet" href="css/page.css">
+
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="page_top">
+        <a href="javascript:history.go(-1)" class="go_back"> <img src="images/goback.png" alt=""></a>
+        <h3 class="page_title">标题</h3>
+    </div>
+
+    <ul class="img_grid">
+        <li th:each="plan:${ywEjtpList}">
+            <img th:src="@{${headPath}+'yjtp_'+${plan.zdid}+'_'+ ${plan.yjid}+'/'+${plan.path}}" alt="">
+        </li>
+        <!--<li>-->
+        <!--<img src="images/2.jpg" alt="">-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<img src="images/3.jpg" alt="">-->
+        <!--</li>-->
+
+        <!--<li>-->
+        <!--<img src="images/4.jpg" alt="">-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<img src="images/5.jpg" alt="">-->
+        <!--</li>-->
+        <!--&lt;!&ndash;<li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<img src="images/6.jpg" alt="">&ndash;&gt;-->
+        <!--&lt;!&ndash;</li>&ndash;&gt;-->
+
+        <!--<li>-->
+        <!--<img src="images/7.jpg" alt="">-->
+        <!--</li>-->
+
+        <!--<li>-->
+        <!--<img src="images/8.jpg" alt="">-->
+        <!--</li>-->
+
+        <!--<li>-->
+        <!--<img src="images/9.jpg" alt="">-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<img src="images/video1.jpg" alt="">-->
+        <!--</li>-->
+
+
+    </ul>
+</div>
+
+
+<!--预览图片-->
+<div id="preview" class="swiper-container">
+    <div class="swiper-wrapper">
+
+    </div>
+    <!-- 如果需要分页器 -->
+    <div class="swiper-pagination"></div>
+
+    <div class="closs-btn" style="">×</div>
+
+</div>
+
+<!--轮播图-->
+<div id="slideshow" class="swiper-container">
+    <div class="swiper-wrapper">
+
+    </div>
+    <!-- 如果需要分页器 -->
+    <div class="swiper-pagination"></div>
+
+    <!--<div class="closs-btn" style="">×</div>-->
+
+</div>
+
+</body>
+<script src="lib/jquery-2.1.4.js"></script>
+<script src="lib/fastclick.js"></script>
+<script src="lib/swiper/swiper.js"></script>
+<script src="js/page.js"></script>
+
+<script>
+    $(function () {
+        FastClick.attach(document.body);
+
+        //点击时预览图片
+        var isNotInitPreview = true;
+        var previewSwiper = {};
+        $(".img_grid>li").on("click", function () {
+            var $this = $(this);
+            var imgIndex = $this.index();
+            var previewImgSrc = [
+                "images/1.jpg",
+                "images/2.jpg",
+                "images/3.jpg",
+                "images/4.jpg",
+                "images/5.jpg",
+                // "images/6.jpg",
+                "images/7.jpg",
+                "images/8.jpg",
+                "images/9.jpg",
+                "images/video1.mp4",
+            ];
+            var previewSwiperParam = {
+                //设置宽度为全屏
+                width: window.innerWidth,
+                on: {
+                    resize: function () {
+                        this.params.width = window.innerWidth;
+                        this.update();
+                    },
+
+                },
+                // loop:true,//循环
+                speed: 400,
+                spaceBetween: 100,
+                zoom: true,
+                initialSlide: imgIndex,//显示第几张
+                autoplay: false,
+                // 如果需要分页器
+                pagination: {
+                    el: '.swiper-pagination',
+                    type: 'fraction'
+                },
+                renderFraction: function (currentClass, totalClass) {
+                    return '<span class="' + currentClass + '"></span>' +
+                        ' of ' +
+                        '<span class="' + totalClass + '"></span>';
+                }
+            };
+
+            if (isNotInitPreview) {
+                previewSwiper = newSwiper("#preview", previewImgSrc, previewSwiperParam);
+
+                isNotInitPreview = false;//表示已经初始化了swiper
+
+            } else {
+                previewSwiper.zoom.out(); //清除上一次放大
+                previewSwiper.slideTo(imgIndex, 0.1, false);//点击第几张显示第几张
+                $("#preview").show();
+
+            }
+
+        });
+
+
+        // 用户长时间未操作 显示轮播
+        var isNotInitSlideshow = true;
+        var slideshowSwiper = {};
+        var slideshowImgSrc = [
+            "images/11.jpg",
+            "images/22.jpg",
+            "images/33.jpg",
+            "images/1.jpg",
+        ];
+
+        overTime(isNotInitSlideshow, slideshowSwiper, slideshowImgSrc);
+
+    });
+
+
+</script>
+</html>
