@@ -10,6 +10,7 @@
             and yjid=#{yjid}
             and zdid=#{zdid}
         </where>
+        order by createtime desc
     </select>
 
     <insert id="doSaveEjtp">
@@ -32,29 +33,5 @@
         </where>
     </delete>
 
-    <!--<insert id="doSavePic">-->
-    <!--insert  into yw_yjtp-->
-    <!--(zdid,pname,pdescribe,path,creater,createtime)values (-->
-    <!--#{zdid},#{pname},#{pdescribe},#{path},#{creater},now()-->
-    <!--)-->
-    <!--</insert>-->
-
-    <!--<delete id="doPicDel">-->
-    <!--delete from yw_yjtp-->
-    <!--<where>-->
-    <!--id in-->
-    <!--<foreach collection="idList" item="id" open="(" close=")" separator=",">-->
-    <!--#{id}-->
-    <!--</foreach>-->
-    <!--</where>-->
-    <!--</delete>-->
-
-    <!--<select id="getYjtpDataById" resultType="com.example.pictureproject.entity.YwYjtp">-->
-    <!--select * from yw_yjtp-->
-    <!--<where>-->
-    <!--1=1-->
-    <!--and id=#{id}-->
-    <!--</where>-->
-    <!--</select>-->
 
 </mapper>

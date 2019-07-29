@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>描述：</label>
+            <label class="form-label col-xs-4 col-sm-3">描述：</label>  <!--<span class="c-red">*</span>-->
             <div class="formControls col-xs-8 col-sm-9">
                 <input type="text" class="input-text" value="" placeholder="" id="sdescribe" name="sdescribe">
             </div>
@@ -75,6 +75,26 @@
     function submitForm() {
 
         var formData = $("#form-member-add").serialize();
+        if (formData.get('sname') == "" || formData.get('sname') == null) {
+            alert("请输入终端名称！");
+            return
+        } else if (formData.get('sname').length > 30) {
+            alert("终端名称不能超出30个字符！");
+            return
+        }
+
+        if (formData.get('sdescribe').length > 100) {
+            alert("描述不能超出100个字符！");
+            return;
+        }
+
+        if (formData.get('surl') == "" || formData.get('surl') == null) {
+            alert("请输入URL！");
+            return
+        } else if (formData.get('sname').length > 30) {
+            alert("URL不能超出30个字符！");
+            return
+        }
         $.ajax({
                 type: 'post',
                 data: formData,

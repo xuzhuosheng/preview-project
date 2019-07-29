@@ -16,7 +16,7 @@
 
     <h2 class="page_title">标题</h2>
     <div class="img_grid grid_2">
-        <a th:each="plan:${ywYjtpList}" th:href="@{'toEjtpIndex?yjid='+${plan.id}+'&zdid='+${plan.zdid} }" >
+        <a th:each="plan:${ywYjtpList}" th:href="@{'toEjtpIndex?yjid='+${plan.id}+'&zdid='+${plan.zdid} }">
             <img th:src="@{${headPath}+${plan.path}}" alt="">
         </a>
         <!--<a href="index_1.html"><img th:src="@{images/2.jpg}" alt=""></a>
@@ -25,8 +25,6 @@
         <a href="index_1.html"><img th:src="@{images/5.jpg}" alt=""></a>-->
     </div>
 </div>
-
-
 
 
 <!--轮播图-->
@@ -38,7 +36,7 @@
     <div class="swiper-pagination"></div>
 
 </div>
-
+<input type="text" th:value="${ywAutoPicStr}" id="autoInp">
 </body>
 <script th:src="@{lib/jquery-2.1.4.js}"></script>
 <script th:src="@{lib/fastclick.js}"></script>
@@ -49,16 +47,18 @@
     $(function () {
         FastClick.attach(document.body);
 
+        var autoStr = $("#autoInp").val();
+        var autoArr = autoStr.split(',');
+        var slideshowImg = [];
+        for (var i = 0; i < autoArr.length; i++) {
+            slideshowImg.push(autoArr[i]);
+        }
         // 用户长时间未操作 显示轮播
         var isNotInitSlideshow = true;
         var slideshowSwiper = {};
-        var slideshowImgSrc = [
-            "images/11.jpg",
-            "images/22.jpg",
-            "images/33.jpg",
-            "images/1.jpg",
-        ];
-        overTime(isNotInitSlideshow,slideshowSwiper,slideshowImgSrc);
+        var slideshowImgSrc = slideshowImg ;
+        overTime(isNotInitSlideshow, slideshowSwiper, slideshowImgSrc);
+
     });
 
 

@@ -133,7 +133,22 @@
 
     function submitForm() {
         var formData = new FormData($("#form-article-add")[0]);
-        // var formData = $("#form-article-add").serialize();
+        if (formData.get("pname") == "" || formData.get("pname") == null) {
+            alert("请输入图片标题！")
+            return;
+        } else if (formData.get("pname").length > 30) {
+            alert("图片标题不能超出30个字符！");
+            return;
+        }
+        if (formData.get("pdescribe").length > 100) {
+            alert("图片摘要不能超出100个字符！")
+            return;
+        }
+        if (formData.get("file").name == "") {
+            alert("请上传图片！")
+            return;
+        }
+
         $.ajax({
                 type: 'post',
                 data: formData,

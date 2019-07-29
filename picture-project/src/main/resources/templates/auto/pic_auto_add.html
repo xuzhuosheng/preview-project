@@ -28,25 +28,36 @@
 
 <div class="page-container">
     <form class="form form-horizontal" id="form-article-add" method="post">
-        <input type="text" style="display: none" th:value="${zdid}" id="zdidInp" name="zdid">
-        <input type="text" style="display: none" th:value="${yjtpId}" id="yjtpIdInp" name="yjid">
+        <!--<input type="text" style="display: none" th:value="${zdid}" id="zdidInp" name="zdid">-->
+        <!--<input type="text" style="display: none" th:value="${yjtpId}" id="yjtpIdInp" name="yjid">-->
         <input type="text" style="display: none" value="" id="uploadFileNameInp" name="uploadFileName">
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>终端名称：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+				<select name="zdid" class="select">
+                    <option th:each="yw,zdgl:${ywZdglList}" th:value="${yw.id}" th:text="${yw.sname}"></option>
+				</select>
+				</span>
+            </div>
+        </div>
 
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图片标题：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="" id="pname" name="pname">
+                <input type="text" class="input-text" value="" placeholder="" id="ptitle" name="ptitle">
             </div>
         </div>
 
-        <div class="row cl">
+        <!--<div class="row cl">
             <label class="form-label col-xs-4 col-sm-2">图片摘要：</label>
             <div class="formControls col-xs-8 col-sm-9">
                 <textarea name="pdescribe" cols="" rows="" class="textarea" placeholder="说点什么 " datatype="*10-100"
                           dragonfly="true" nullmsg="备注不能为空！" id="pdescribe"></textarea>
-                <!--onKeyUp="$.Huitextarealength(this,200)"-->
+                &lt;!&ndash;onKeyUp="$.Huitextarealength(this,200)"&ndash;&gt;
             </div>
-        </div>
+        </div>-->
 
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2">图片上传：</label>
@@ -105,24 +116,21 @@
     function ejtp_save_submit() {
         var formData = new FormData($("#form-article-add")[0]);
         if (formData.get('uploadFileName') == null || formData.get('uploadFileName') == '') {
-            alert("请先上传图片");
+            alert("请上传图片");
             return;
         }
-        if (formData.get('pname') == null || formData.get('pname') == '') {
-            alert("请输入图片标题！");
+        if (formData.get("ptitle") == null || formData.get("ptitle") == '') {
+            alert("请输入标题");
             return;
-        } else if (formData.get('pname').length > 30) {
+        } else if (formData.get("ptitle").length > 30) {
             alert("图片标题不能超出30个字符！");
             return;
         }
-        if (formData.get('pdescribe') > 100) {
-            alert("图片摘要不能超出100个字符！")
-            return;
-        }
+
         $.ajax({
                 type: 'post',
                 data: formData,
-                url: 'doSaveShowAdd',
+                url: 'doSaveAutoPic',
                 async: false,
                 cache: false,
                 contentType: false,
@@ -408,17 +416,15 @@
                 },
 
                 formData: {
-                    yjtpId: yjtpId,
-                    zdid: zdid,
-                    pname: $("#pname").val(),
-                    pdescribe: $("#pdescribe").val()
+                    zdid: zdid
+
                 },
                 dnd: '#dndArea',
                 paste: '#uploader',
                 swf: 'lib/webuploader/0.1.5/Uploader.swf',
                 chunked: false,
                 chunkSize: 512 * 1024,
-                server: 'doUploadPics',
+                server: 'doUploadAutoPics',
                 // runtimeOrder: 'flash',
 
                 accept: {

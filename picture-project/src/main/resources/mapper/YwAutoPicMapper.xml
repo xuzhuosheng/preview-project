@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pictureproject.dao.YwAutoPicDao">
+
+    <select id="getAutoPicData" resultType="com.example.pictureproject.entity.YwAutoPic">
+        select a.id,a.zdid,a.ptitle,a.path,a.creater,a.createtime,a.bz,b.sname sname from yw_auto_pic a
+        left join yw_zdgl b on a.zdid=b.id
+        <where>
+            1=1
+            <if test="zdid!='' and zdid!=null and zdid!=0 ">
+                and zdid=#{zdid}
+            </if>
+            <if test="searchContent!='' and searchContent!=null">
+                and ptitle like concat(concat('%',#{searchContent}),'%')
+            </if>
+
+        </where>
+        order by createtime desc
+    </select>
+    <insert id="saveAutoPic">
+        insert into  yw_auto_pic
+        (zdid,ptitle,path,creater,createtime)
+        values
+        (#{zdid},#{ptitle},#{fileName},#{creater},now() )
+    </insert>
+
+    <delete id="doAutoPicDel">
+        delete from yw_auto_pic
+        <where>
+            id in
+            <foreach collection="idList" separator="," open="(" close=")" item="id">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+
+
+</mapper>

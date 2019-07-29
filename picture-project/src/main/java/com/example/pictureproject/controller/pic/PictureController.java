@@ -57,37 +57,52 @@ public class PictureController {
     @Autowired
     private YwEjtpService ywEjtpService;
 
+    /**
+     * 跳转到图片管理方法
+     * 搜索方法
+     *
+     * @param request
+     * @param map
+     * @return
+     */
     @RequestMapping ("toPicIndex")
     public ModelAndView toPicIndex(HttpServletRequest request, ModelMap map) {
         view = new ModelAndView();
+//        获取前端参数
         String searchContent = request.getParameter("searchContent");
         String zdid = request.getParameter("zdid");
         try {
+//            获取终端
             List<YwZdgl> ywZdglList = new ArrayList<>();
+//            获取一级图片数据
             dataList = ywYjtpService.getYjtpData(searchContent, zdid);
             ywZdglList = ywZdglService.getZdglData("");
             map.put("ywZdglList", ywZdglList);
             map.put("dataList", dataList);
             map.put("searchContent", searchContent);
             map.put("zdid", zdid);
+//            返回路径
             map.put("headPath", relativePath.split("/")[1] + "/" + yjtpPath + "/");
-
-
             view.setViewName("pic/pic_index");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         return view;
     }
 
+    /**
+     * 跳转到添加图片方法
+     *
+     * @param map
+     * @return
+     */
     @RequestMapping ("toPicAdd")
     public ModelAndView toPicAdd(ModelMap map) {
         view = new ModelAndView();
 
         try {
+            //            获取终端，页面作为select
             List<YwZdgl> ywZdglList = new ArrayList<>();
             ywZdglList = ywZdglService.getZdglData("");
             map.put("ywZdglList", ywZdglList);
@@ -100,22 +115,31 @@ public class PictureController {
         return view;
     }
 
-
+    /**
+     * 保存一级图片方法
+     * 一级图片作为封面只能上传一张
+     *
+     * @param request
+     * @param multipartFile
+     * @param session
+     * @return
+     */
     @RequestMapping (value = "doSavePic", method = RequestMethod.POST)
     @ResponseBody
     public ModelMap doSavePic(HttpServletRequest request,
                               @RequestParam (value = "file", required = false) MultipartFile multipartFile,
                               HttpSession session) {
         map = new ModelMap();
+//        获取页面参数
         String zdid = request.getParameter("zdid");
         String pname = request.getParameter("pname");
         String pdescribe = request.getParameter("pdescribe");
+//        通过session 获取当前用户
         TXtUser user = (TXtUser) session.getAttribute("user");
         String creater = user.getUsername();
         String newImgName = "";
         try {
-
-
+//            上传图片
             if (multipartFile.getSize() > 0) {
                 String imgFileName = multipartFile.getOriginalFilename();
                 Date date = new Date();
@@ -125,25 +149,30 @@ public class PictureController {
                 File targetFile = new File(path, newImgName);
                 multipartFile.transferTo(targetFile);
             }
-
+//      上传成功后保存页面数据
             ywYjtpService.doSavePic(zdid, pname, pdescribe, newImgName, creater);
-
             map.put("msg", "保存成功！");
         } catch (Exception e) {
             e.printStackTrace();
             map.put("msg", "保存失败！");
         }
-
         return map;
     }
 
 
+    /**
+     * 删除方法，支持单记录和多记录删除
+     *
+     * @param request
+     * @return
+     */
     @RequestMapping (value = "doPicDel", method = RequestMethod.POST)
     @ResponseBody
     public ModelMap doPicDel(HttpServletRequest request) {
         map = new ModelMap();
-        String ids = request.getParameter("ids");
+        String ids = request.getParameter("ids");//id1,id2,id3,id...
         try {
+//            讲字符串ids转成特定的格式，才能本Mybatis做批量删除
             String idArr[] = ids.split(",");
             List<String> idList = Arrays.asList(idArr);
             ywYjtpService.doPicDel(idList);
@@ -157,16 +186,24 @@ public class PictureController {
 
     }
 
+    /**
+     * 跳转到一级图片修改页面方法
+     * 只允许修改字符数据，不允许重新上传图片
+     *
+     * @param request
+     * @param map
+     * @return
+     */
     @RequestMapping (value = "toPicEdit", method = RequestMethod.GET)
     public ModelAndView toPicEdit(HttpServletRequest request, ModelMap map) {
         String id = request.getParameter("id");
         try {
             view = new ModelAndView();
-            view.setViewName("pic/pic_edit");
             dataList = new ArrayList<>();
-            dataList = ywYjtpService.getYjtpDataById(id);
             List<YwZdgl> ywZdglList = new ArrayList<>();
+            dataList = ywYjtpService.getYjtpDataById(id);//根据id获取数据
             ywZdglList = ywZdglService.getZdglData("");
+            view.setViewName("pic/pic_edit");
             map.put("dataList", dataList);
             map.put("ywZdglList", ywZdglList);
 
@@ -179,9 +216,18 @@ public class PictureController {
     }
 
 
+    /**
+     * 跳转二级图片页面方法
+     * 根据一级图片的id和zdid（终端id）
+     *
+     * @param request
+     * @param map
+     * @return
+     */
     @RequestMapping (value = "toPicShow")
     public ModelAndView toPicShow(HttpServletRequest request, ModelMap map) {
         view = new ModelAndView();
+//        获取页面参数
         String yjid = request.getParameter("id");
         String zdid = request.getParameter("zdid");
         String pname = request.getParameter("pname");
@@ -193,6 +239,7 @@ public class PictureController {
             map.put("yjtpId", yjid);
             map.put("zdid", zdid);
             map.put("pname", pname);
+//            二级图片页面显示路径
             map.put("headPath", relativePath.split("/")[1] + "/" + ejtpPath + "/");
 
         } catch (Exception e) {
@@ -202,6 +249,14 @@ public class PictureController {
 
     }
 
+    /**
+     * 跳转到二级图片添加页面方法
+     * 先将多图片上传，返回path，再保存数据库
+     *
+     * @param request
+     * @param map
+     * @return
+     */
     @RequestMapping ("toShowAdd")
     public ModelAndView toShowAdd(HttpServletRequest request, ModelMap map) {
         view = new ModelAndView();
@@ -213,7 +268,15 @@ public class PictureController {
         return view;
     }
 
-
+    /**
+     * 批量上传图片方法
+     * 由于前端批量上传插件的特殊性，一次提交多图片，该方法循环多次执行
+     *
+     * @param request
+     * @param multipartFile
+     * @param session
+     * @return
+     */
     @RequestMapping (value = "doUploadPics", method = RequestMethod.POST)
     @ResponseBody
     public ModelMap doUploadPics(HttpServletRequest request,
@@ -223,8 +286,6 @@ public class PictureController {
 
         String yjtpId = request.getParameter("yjtpId");
         String zdid = request.getParameter("zdid");
-//        String pname = request.getParameter("pname");
-//        String pdescribe = request.getParameter("pdescribe");
         try {
             if (multipartFile.length > 0) {
 
@@ -234,6 +295,7 @@ public class PictureController {
                         Date date = new Date();
                         long time = date.getTime();
                         String newImgName = time + "_" + imgFileName;
+//                        二级图片路径
                         String path = uploadFilePath + ejtpPath + "/" + "yjtp_" + zdid + "_" + yjtpId + "/";
                         File targetFile = new File(path, newImgName);
                         if (!targetFile.exists()) {
@@ -254,6 +316,13 @@ public class PictureController {
 
     }
 
+    /**
+     * 保存二级图片信息
+     *
+     * @param request
+     * @param session
+     * @return
+     */
     @RequestMapping (value = "doSaveShowAdd", method = RequestMethod.POST)
     @ResponseBody
     public ModelMap doSaveShowAdd(HttpServletRequest request, HttpSession session) {
@@ -262,7 +331,8 @@ public class PictureController {
         String zdid = request.getParameter("zdid");
         String pname = request.getParameter("pname");
         String pdescribe = request.getParameter("pdescribe");
-        String uploadFileName = request.getParameter("uploadFileName");
+//        获取上传图片的路径
+        String uploadFileName = request.getParameter("uploadFileName");//path1,path2,path3,path...
 
 
         String[] uploadFileNameArr = {};
@@ -273,17 +343,13 @@ public class PictureController {
         TXtUser user = (TXtUser) session.getAttribute("user");
         String creater = user.getUsername();
 
-
         try {
-
             if (uploadFileNameArr != null && uploadFileNameArr.length > 0) {
-
 
                 for(int i = 0; i < uploadFileNameArr.length; i++) {
                     ywEjtpService.doSaveEjtp(yjid, zdid, pname, pdescribe, uploadFileNameArr[i].toString(), creater);
                 }
                 map.put("msg", "保存成功！");
-
             } else {
                 map.put("msg", "请先上传图片！");
             }
@@ -297,6 +363,12 @@ public class PictureController {
     }
 
 
+    /**
+     * 删除二级图片方法，支持单记录和多记录删除
+     *
+     * @param request
+     * @return
+     */
     @RequestMapping (value = "doEjtpDel", method = RequestMethod.POST)
     @ResponseBody
     public ModelMap doEjtpDel(HttpServletRequest request) {

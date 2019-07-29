@@ -1,9 +1,11 @@
 package com.example.previewproject.controller;
 
 
+import com.example.previewproject.entity.YwAutoPic;
 import com.example.previewproject.entity.YwEjtp;
 import com.example.previewproject.entity.YwYjtp;
 import com.example.previewproject.entity.YwZdgl;
+import com.example.previewproject.service.YwAutoPicService;
 import com.example.previewproject.service.YwEjtpService;
 import com.example.previewproject.service.YwYjtpService;
 import com.example.previewproject.service.YwZdglService;
@@ -34,6 +36,9 @@ public class PreviewController {
     @Value ("${ejtpPath}")
     private String ejtpPath;
 
+    @Value ("${autoPic}")
+    private String autoPic;
+
     @Autowired
     private YwZdglService ywZdglService;
 
@@ -42,6 +47,9 @@ public class PreviewController {
 
     @Autowired
     private YwEjtpService ywEjtpService;
+
+    @Autowired
+    private YwAutoPicService ywAutoPicService;
 
     @RequestMapping ("/toIndex")
     public ModelAndView toIndex(HttpServletRequest request, ModelMap map) {
@@ -54,7 +62,22 @@ public class PreviewController {
 
             if (zdgl != null) {
                 List<YwYjtp> ywYjtpList = new ArrayList<>();
+                List<YwAutoPic> ywAutoPicList = new ArrayList<>();
                 ywYjtpList = ywYjtpService.getYjtpDataByZdid(zdgl.getId());
+                ywAutoPicList = ywAutoPicService.getAutoPicData(zdgl.getId());
+
+                String ywAutoPicStr = "";
+                if (ywAutoPicList.size() > 0) {
+                    StringBuffer s = new StringBuffer();
+                    for(int i = 0; i < ywAutoPicList.size(); i++) {
+                        s.append(relativePath.split("/")[1] + "/" + autoPic + "/" + ywAutoPicList.get(i).getPath() +
+                                ",");
+                    }
+                    ywAutoPicStr = s.substring(0, s.length() - 1);
+                }
+
+
+                map.put("ywAutoPicStr", ywAutoPicStr);
                 map.put("ywYjtpList", ywYjtpList);
                 map.put("headPath", relativePath.split("/")[1] + "/" + yjtpPath + "/");
             } else {
