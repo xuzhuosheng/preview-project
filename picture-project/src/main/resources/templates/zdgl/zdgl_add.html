@@ -74,7 +74,9 @@
 
     function submitForm() {
 
-        var formData = $("#form-member-add").serialize();
+        // var formData = $("#form-member-add").serialize();
+        var formData = new FormData($("#form-member-add")[0]);
+
         if (formData.get('sname') == "" || formData.get('sname') == null) {
             alert("请输入终端名称！");
             return
@@ -90,15 +92,19 @@
 
         if (formData.get('surl') == "" || formData.get('surl') == null) {
             alert("请输入URL！");
-            return
-        } else if (formData.get('sname').length > 30) {
+            return;
+        } else if (formData.get('surl').length > 30) {
             alert("URL不能超出30个字符！");
-            return
+            return;
         }
         $.ajax({
                 type: 'post',
                 data: formData,
                 url: 'doSaveZdgl',
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
                 success: function (data) {
                     var d = eval(data);
                     alert(d.msg);

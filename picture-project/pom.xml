@@ -12,6 +12,7 @@
     <artifactId>picture-project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>picture-project</name>
+    <packaging>jar</packaging><!--打包用-->
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -30,6 +31,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -82,6 +84,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
         </plugins>
     </build>
 

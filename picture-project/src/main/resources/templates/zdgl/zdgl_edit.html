@@ -78,11 +78,16 @@
 
     function submitForm() {
 
-        var formData = $("#form-member-add").serialize();
+        // var formData = $("#form-member-add").serialize();
+        var formData = new FormData($("#form-member-add")[0]);
         $.ajax({
                 type: 'post',
                 data: formData,
                 url: 'doUpdateZdgl',
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
                 success: function (data) {
                     var d = eval(data);
                     alert(d.msg);

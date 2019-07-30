@@ -53,7 +53,7 @@ public class YwAutoPicController {
 
     private ModelMap map;
 
-    @RequestMapping (value = "toAutoPicIndex", method = RequestMethod.GET)
+    @RequestMapping (value = "toAutoPicIndex")
     public ModelAndView toAutoPicIndex(HttpServletRequest request, ModelMap map) {
         view = new ModelAndView();
         String zdid = request.getParameter("zdid");

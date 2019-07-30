@@ -37,11 +37,11 @@
     <input type="text" th:value="${zdid}" style="display: none" id="zdidInp"/>
 
     <div class="text-c">
-        <form action="toAutoPicIndex" method="get">
+        <form action="toAutoPicIndex" method="post">
         <span class="select-box" style="width:150px">
 			<select class="select" name="zdid" size="1">
 				<option value="0">全部</option>
-                <option th:each="yw:${ywZdglList}" th:value="${yw.id}" th:text="${yw.sname}"></option>
+                <option th:each="yw,zdgl:${ywZdglList}" th:value="${yw.id}" th:text="${yw.sname}"></option>
 			</select>
         </span>
 
@@ -86,6 +86,7 @@
     $(function () {
         $(".portfolio-area li").Huihover();
     });
+
     $(function () {
         var zdid = $("#zdidInp").val();
         if (!zdid == "") {
