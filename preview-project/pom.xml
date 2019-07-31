@@ -12,6 +12,7 @@
     <artifactId>preview-project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>preview-project</name>
+    <packaging>jar</packaging>
     <description>Demo project for Spring Boot</description>
 
     <properties>

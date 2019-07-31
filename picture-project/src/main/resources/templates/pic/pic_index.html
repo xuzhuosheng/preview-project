@@ -24,31 +24,37 @@
     <title>图片列表</title>
 </head>
 <body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 图片管理 <span
-        class="c-gray en">&gt;</span> 图片列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
-                                              href="javascript:location.replace(location.href);" title="刷新"
-                                              id="reflashAId"><i
-        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> <span
+        th:text="'终端：'+${sname}"></span> <span
+        class="c-gray en">&gt;</span> 一级图片管理
+
+
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;margin-left: 5px"
+       th:href="@{'toPicIndex?zdid='+${zdid}+'&sname='+${sname} }" title="刷新"
+       id="reflashAId"><i
+            class="Hui-iconfont">&#xe68f;</i></a>
+
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;"
+       href="toZdglIndex" title="返回终端"
+       id=""><i class="Hui-iconfont">&#xe644;</i></a>
+</nav>
 <div class="page-container">
-    <input type="text" th:value="${zdid}" style="display: none" id="zdidInp"/>
     <div class="text-c">
         <form action="toPicIndex" method="post">
-        <span class="select-box" style="width:150px">
-			<select class="select" name="zdid" size="1">
-				<option value="0">全部</option>
-                <option th:each="yw,zdgl:${ywZdglList}" th:value="${yw.id}" th:text="${yw.sname}"></option>
-			</select>
-        </span>
+            <input type="text" th:value="${zdid}" name="zdid" style="display: none" id="zdidInp"/>
+
 
             <input type="text" name="searchContent" id="" placeholder="请输入搜索内容。。。"
                    th:value="${searchContent==''?'':searchContent}" style="width:250px" class="input-text">
             <button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
         </form>
     </div>
-    <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="l"><a href="javascript:;" onclick="picture_del('','2')"
-                                                               class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a
-            class="btn btn-primary radius" onclick="picture_add('添加图片','toPicAdd')" href="javascript:;"><i
-            class="Hui-iconfont">&#xe600;</i> 添加图片</a>
+    <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="l">
+        <a href="javascript:;" onclick="picture_del('','2')" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+        <a class="btn btn-primary radius" onclick="picture_add('添加图片','toPicAdd')" href="javascript:;"><i
+                class="Hui-iconfont">&#xe600;</i> 添加图片</a>
+        <a class="btn btn-primary radius" onclick="picture_show('二级图库','toPicShow','','','2')" href="javascript:;"><i
+                class="Hui-iconfont">&#xe600;</i> 编辑二级图库</a>
 
     </span> <span class="r">共有数据：<strong><span
             th:text="${dataList.size()}"></span> </strong> 条</span></div>
@@ -68,8 +74,10 @@
             </thead>
             <tbody>
             <tr class="text-c" th:each="plan:${dataList}" th:id="${plan.id}" th:value="${plan.zdid}"
-                ondblclick="picture_show('二级图库','toPicShow','',this)" title="双击记录查看二级图库" th:name="${plan.pname}">
-                <td><input name="checkboxInp" type="checkbox" th:value="${plan.id}"></td>
+                ondblclick="picture_show('二级图库','toPicShow','',this,'1')" title="双击记录查看二级图库" th:name="${plan.pname}"
+                th:sname="${plan.sname}">
+                <td><input name="checkboxInp" type="checkbox" th:value="${plan.id}" th:pname="${plan.pname}"
+                           th:zdid="${plan.zdid}" th:sname="${plan.sname}"></td>
                 <td th:text="${plan.sname}">终端</td>
                 <td th:text="${plan.pname}">分类名称</td>
                 <td><!--<a href="javascript:;" onClick="picture_edit('图库编辑','toPicEdit','10001')">-->
@@ -82,8 +90,8 @@
                     <a style="text-decoration:none" class="ml-5"
                        onClick="picture_edit('图库编辑','toPicEdit','10001',this)" href="javascript:;" title="编辑"><i
                             class="Hui-iconfont">&#xe6df;</i></a>
-                    <a style="text-decoration:none" class="ml-5" onClick="picture_del(this,'1')" href="javascript:;"
-                       title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                    <!--<a style="text-decoration:none" class="ml-5" onClick="picture_del(this,'1')" href="javascript:;"-->
+                    <!--title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>-->
                 </td>
             </tr>
             </tbody>
@@ -123,9 +131,6 @@
     });
 
 
-
-
-
     /*function showList(obj) {
 
         picture_show()
@@ -143,15 +148,43 @@
     }
 
     /*图片-查看*/
-    function picture_show(title, url, id, obj) {
-        var id = obj.id;
-        var zdid = obj.getAttribute("value");
-        var pname = obj.getAttribute("name");
+    function picture_show(title, url, id, obj, type) {
+        var id;
+        var zdid;
+        var pname;
+        var sname;
+        if (type == '1') {
+            id = obj.id;
+            zdid = obj.getAttribute("value");
+            pname = obj.getAttribute("name");
+            sname = obj.getAttribute("sname");
+        }
+        if (type == '2') {
+            var obj2 = $("input[name='checkboxInp']:checked");
+            // alert(obj2.length);
+            // alert(obj2.size());
+
+            if (obj2.length == 0) {
+                alert("请选择记录进行查看！");
+                return;
+            }
+            if (obj2.length > 1) {
+                alert("请选择一条记录进行查看！")
+                return;
+            }
+            id = obj2[0].value;
+            zdid = obj2[0].getAttribute("zdid");
+            pname = obj2[0].getAttribute("pname");
+            sname = obj2[0].getAttribute("sname");
+
+        }
+
         var index = layer.open({
-            type: 2,
-            title: title,
-            content: url + "?id=" + id + "&zdid=" + zdid + "&pname=" + pname
-        });
+                type: 2,
+                title: title,
+                content: url + "?id=" + id + "&zdid=" + zdid + "&pname=" + pname + "&sname=" + sname
+            })
+        ;
         layer.full(index);
     }
 

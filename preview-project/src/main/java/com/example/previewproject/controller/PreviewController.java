@@ -39,6 +39,7 @@ public class PreviewController {
     @Value ("${autoPic}")
     private String autoPic;
 
+
     @Autowired
     private YwZdglService ywZdglService;
 
@@ -62,21 +63,8 @@ public class PreviewController {
 
             if (zdgl != null) {
                 List<YwYjtp> ywYjtpList = new ArrayList<>();
-                List<YwAutoPic> ywAutoPicList = new ArrayList<>();
                 ywYjtpList = ywYjtpService.getYjtpDataByZdid(zdgl.getId());
-                ywAutoPicList = ywAutoPicService.getAutoPicData(zdgl.getId());
-
-                String ywAutoPicStr = "";
-                if (ywAutoPicList.size() > 0) {
-                    StringBuffer s = new StringBuffer();
-                    for(int i = 0; i < ywAutoPicList.size(); i++) {
-                        s.append(relativePath.split("/")[1] + "/" + autoPic + "/" + ywAutoPicList.get(i).getPath() +
-                                ",");
-                    }
-                    ywAutoPicStr = s.substring(0, s.length() - 1);
-                }
-
-
+                String ywAutoPicStr = getAutopicStr(zdgl.getId());
                 map.put("ywAutoPicStr", ywAutoPicStr);
                 map.put("ywYjtpList", ywYjtpList);
                 map.put("headPath", relativePath.split("/")[1] + "/" + yjtpPath + "/");
@@ -95,6 +83,26 @@ public class PreviewController {
     }
 
 
+    public String getAutopicStr(int zdid) {
+        String ywAutoPicStr = "";
+        try {
+            List<YwAutoPic> ywAutoPicList = new ArrayList<>();
+            ywAutoPicList = ywAutoPicService.getAutoPicData(zdid);
+            if (ywAutoPicList.size() > 0) {
+                StringBuffer s = new StringBuffer();
+                for(int i = 0; i < ywAutoPicList.size(); i++) {
+                    s.append(relativePath.split("/")[1] + "/" + autoPic + "/" + ywAutoPicList.get(i).getPath() +
+                            ",");
+                }
+                ywAutoPicStr = s.substring(0, s.length() - 1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ywAutoPicStr;
+    }
+
     @RequestMapping ("toEjtpIndex")
     public ModelAndView toEjtpIndex(HttpServletRequest request, ModelMap map) {
         String yjid = request.getParameter("yjid");
@@ -105,7 +113,22 @@ public class PreviewController {
             List<YwEjtp> ywEjtpList = new ArrayList<>();
             ywEjtpList = ywEjtpService.getEjtpData(yjid, zdid);
 
+            String ywEjtpStr = "";
+            if (ywEjtpList.size() > 0) {
+                StringBuffer buffer = new StringBuffer();
+                for(int i = 0; i < ywEjtpList.size(); i++) {
+                    buffer.append(relativePath.split("/")[1] + "/" + ejtpPath + "/" + "yjtp_" + zdid + "_" + yjid +
+                            "/" + ywEjtpList.get(i).getPath() +
+                            ",");
+                }
+                ywEjtpStr = buffer.substring(0, buffer.length() - 1);
+            }
+
+            String ywAutoPicStr = getAutopicStr(Integer.parseInt(zdid));
             map.put("ywEjtpList", ywEjtpList);
+            map.put("ywEjtpStr", ywEjtpStr);
+            map.put("ywAutoPicStr", ywAutoPicStr);
+
             map.put("headPath", relativePath.split("/")[1] + "/" + ejtpPath + "/");
             view.setViewName("index_1");
 

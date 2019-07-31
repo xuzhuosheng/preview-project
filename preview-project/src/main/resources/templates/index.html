@@ -19,10 +19,10 @@
         <a th:each="plan:${ywYjtpList}" th:href="@{'toEjtpIndex?yjid='+${plan.id}+'&zdid='+${plan.zdid} }">
             <img th:src="@{${headPath}+${plan.path}}" alt="">
         </a>
-        <!--<a href="index_1.html"><img th:src="@{images/2.jpg}" alt=""></a>
-        <a href="index_1.html"><img th:src="@{images/3.jpg}" alt=""></a>
-        <a href="index_1.html"><img th:src="@{images/4.jpg}" alt=""></a>
-        <a href="index_1.html"><img th:src="@{images/5.jpg}" alt=""></a>-->
+        <!--<a href="index_1.html"><img th:src="@{image/2.jpg}" alt=""></a>
+        <a href="index_1.html"><img th:src="@{image/3.jpg}" alt=""></a>
+        <a href="index_1.html"><img th:src="@{image/4.jpg}" alt=""></a>
+        <a href="index_1.html"><img th:src="@{image/5.jpg}" alt=""></a>-->
     </div>
 </div>
 
@@ -48,16 +48,22 @@
         FastClick.attach(document.body);
 
         var autoStr = $("#autoInp").val();
-        var autoArr = autoStr.split(',');
         var slideshowImg = [];
-        for (var i = 0; i < autoArr.length; i++) {
-            slideshowImg.push(autoArr[i]);
-        }
+        var autoArr = [];
         // 用户长时间未操作 显示轮播
         var isNotInitSlideshow = true;
         var slideshowSwiper = {};
-        var slideshowImgSrc = slideshowImg ;
-        overTime(isNotInitSlideshow, slideshowSwiper, slideshowImgSrc);
+        var slideshowImgSrc;
+        if (autoStr != "") {
+            autoArr = autoStr.split(',');
+            for (var i = 0; i < autoArr.length; i++) {
+                slideshowImg.push(autoArr[i]);
+            }
+
+            slideshowImgSrc = slideshowImg;
+            overTime(isNotInitSlideshow, slideshowSwiper, slideshowImgSrc);
+        }
+
 
     });
 

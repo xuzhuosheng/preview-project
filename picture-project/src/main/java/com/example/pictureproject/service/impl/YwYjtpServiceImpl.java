@@ -40,4 +40,10 @@ public class YwYjtpServiceImpl implements YwYjtpService {
         dataList = ywYjtpDao.getYjtpDataById(id);
         return dataList;
     }
+
+    @Override
+    public void doUpdatePic(String id, String zdid, String pname, String pdescribe) {
+        ywYjtpDao.updatePic(id, zdid, pname, pdescribe);
+
+    }
 }

@@ -41,11 +41,25 @@
     </delete>
 
     <select id="getYjtpDataById" resultType="com.example.pictureproject.entity.YwYjtp">
-        select * from yw_yjtp
+        select a.id,a.zdid,a.pname,a.pdescribe,a.path,a.creater,a.createtime,b.sname sname from yw_yjtp a
+        left join yw_zdgl b on a.zdid=b.id
+        <where>
+            1=1
+            and a.id=#{id}
+        </where>
+    </select>
+
+    <update id="updatePic">
+        update yw_yjtp
+        <set>
+            pname=#{pname},
+            pdescribe=#{pdescribe}
+        </set>
         <where>
             1=1
             and id=#{id}
+            and zdid=#{zdid}
         </where>
-    </select>
+    </update>
 
 </mapper>

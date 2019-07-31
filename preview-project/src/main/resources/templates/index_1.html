@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
     <title>Title</title>
-    <link rel="stylesheet" href="lib/swiper/swiper.css">
-    <link rel="stylesheet" href="css/public.css">
-    <link rel="stylesheet" href="css/page.css">
+    <link rel="stylesheet" th:href="@{lib/swiper/swiper.css}">
+    <link rel="stylesheet" th:href="@{css/public.css}">
+    <link rel="stylesheet" th:href="@{css/page.css}">
 
     <style>
 
@@ -17,7 +17,7 @@
 <body>
 <div class="page">
     <div class="page_top">
-        <a href="javascript:history.go(-1)" class="go_back"> <img src="images/goback.png" alt=""></a>
+        <a href="javascript:history.go(-1)" class="go_back"> <img th:src="@{image/goback.png}" alt=""></a>
         <h3 class="page_title">标题</h3>
     </div>
 
@@ -25,38 +25,6 @@
         <li th:each="plan:${ywEjtpList}">
             <img th:src="@{${headPath}+'yjtp_'+${plan.zdid}+'_'+ ${plan.yjid}+'/'+${plan.path}}" alt="">
         </li>
-        <!--<li>-->
-        <!--<img src="images/2.jpg" alt="">-->
-        <!--</li>-->
-        <!--<li>-->
-        <!--<img src="images/3.jpg" alt="">-->
-        <!--</li>-->
-
-        <!--<li>-->
-        <!--<img src="images/4.jpg" alt="">-->
-        <!--</li>-->
-        <!--<li>-->
-        <!--<img src="images/5.jpg" alt="">-->
-        <!--</li>-->
-        <!--&lt;!&ndash;<li>&ndash;&gt;-->
-        <!--&lt;!&ndash;<img src="images/6.jpg" alt="">&ndash;&gt;-->
-        <!--&lt;!&ndash;</li>&ndash;&gt;-->
-
-        <!--<li>-->
-        <!--<img src="images/7.jpg" alt="">-->
-        <!--</li>-->
-
-        <!--<li>-->
-        <!--<img src="images/8.jpg" alt="">-->
-        <!--</li>-->
-
-        <!--<li>-->
-        <!--<img src="images/9.jpg" alt="">-->
-        <!--</li>-->
-        <!--<li>-->
-        <!--<img src="images/video1.jpg" alt="">-->
-        <!--</li>-->
-
 
     </ul>
 </div>
@@ -85,12 +53,15 @@
     <!--<div class="closs-btn" style="">×</div>-->
 
 </div>
+<input type="text" th:value="${ywAutoPicStr}" id="autoInp">
+<input type="text" th:value="${ywEjtpStr}" id="ejtpInp">
+
 
 </body>
-<script src="lib/jquery-2.1.4.js"></script>
-<script src="lib/fastclick.js"></script>
-<script src="lib/swiper/swiper.js"></script>
-<script src="js/page.js"></script>
+<script th:src="@{lib/jquery-2.1.4.js}"></script>
+<script th:src="@{lib/fastclick.js}"></script>
+<script th:src="@{lib/swiper/swiper.js}"></script>
+<script th:src="@{js/page.js}"></script>
 
 <script>
     $(function () {
@@ -99,21 +70,33 @@
         //点击时预览图片
         var isNotInitPreview = true;
         var previewSwiper = {};
+
+        var ejtpStr = $("#ejtpInp").val();
+        var ejtpArr;
+        var previewEjtpImg = [];
+        if (ejtpStr != "") {
+            ejtpArr = ejtpStr.split(",");
+            for (var a = 0; a < ejtpArr.length; a++) {
+                previewEjtpImg.push(ejtpArr[a]);
+            }
+        }
+
         $(".img_grid>li").on("click", function () {
             var $this = $(this);
             var imgIndex = $this.index();
-            var previewImgSrc = [
-                "images/1.jpg",
-                "images/2.jpg",
-                "images/3.jpg",
-                "images/4.jpg",
-                "images/5.jpg",
-                // "images/6.jpg",
-                "images/7.jpg",
-                "images/8.jpg",
-                "images/9.jpg",
-                "images/video1.mp4",
-            ];
+            var previewImgSrc = previewEjtpImg;
+            // var previewImgSrc = [
+            //     "images/1.jpg",
+            //     "images/2.jpg",
+            //     "images/3.jpg",
+            //     "images/4.jpg",
+            //     "images/5.jpg",
+            //     // "image/6.jpg",
+            //     "images/7.jpg",
+            //     "images/8.jpg",
+            //     "images/9.jpg",
+            //     "images/video1.mp4",
+            // ];
             var previewSwiperParam = {
                 //设置宽度为全屏
                 width: window.innerWidth,
@@ -158,16 +141,22 @@
 
 
         // 用户长时间未操作 显示轮播
+
+        var autoStr = $("#autoInp").val();
+        var autoArr;
+        var slideshowImg = [];
         var isNotInitSlideshow = true;
         var slideshowSwiper = {};
-        var slideshowImgSrc = [
-            "images/11.jpg",
-            "images/22.jpg",
-            "images/33.jpg",
-            "images/1.jpg",
-        ];
+        var slideshowImgSrc;
+        if (autoStr != "") {
+            autoArr = autoStr.split(',');
+            for (var i = 0; i < autoArr.length; i++) {
+                slideshowImg.push(autoArr[i]);
+            }
+            slideshowImgSrc = slideshowImg;
+            overTime(isNotInitSlideshow, slideshowSwiper, slideshowImgSrc);
+        }
 
-        // overTime(isNotInitSlideshow, slideshowSwiper, slideshowImgSrc);
 
     });
 

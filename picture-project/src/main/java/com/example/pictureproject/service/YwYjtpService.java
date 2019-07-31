@@ -12,4 +12,6 @@ public interface YwYjtpService {
     void doPicDel(List<String> idList);
 
     List<YwYjtp> getYjtpDataById(String id);
+
+    void doUpdatePic(String id, String zdid, String pname, String pdescribe);
 }

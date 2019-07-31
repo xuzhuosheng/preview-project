@@ -16,4 +16,7 @@ public interface YwYjtpDao {
     void doPicDel(@Param ("idList") List<String> idList);
 
     List<YwYjtp> getYjtpDataById(@Param ("id") String id);
+
+    void updatePic(@Param ("id") String id, @Param ("zdid") String zdid, @Param ("pname") String pname, @Param (
+            "pdescribe") String pdescribe);
 }

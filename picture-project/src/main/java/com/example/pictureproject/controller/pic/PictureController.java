@@ -71,6 +71,7 @@ public class PictureController {
 //        获取前端参数
         String searchContent = request.getParameter("searchContent");
         String zdid = request.getParameter("zdid");
+        String sname = request.getParameter("sname");
         try {
 //            获取终端
             List<YwZdgl> ywZdglList = new ArrayList<>();
@@ -81,6 +82,8 @@ public class PictureController {
             map.put("dataList", dataList);
             map.put("searchContent", searchContent);
             map.put("zdid", zdid);
+            map.put("sname", sname);
+
 //            返回路径
             map.put("headPath", relativePath.split("/")[1] + "/" + yjtpPath + "/");
             view.setViewName("pic/pic_index");
@@ -160,6 +163,29 @@ public class PictureController {
     }
 
 
+    @RequestMapping (value = "doUpdatePic", method = RequestMethod.POST)
+    @ResponseBody
+    public ModelMap doUpdatePic(HttpServletRequest request) {
+        map = new ModelMap();
+        String id = request.getParameter("yjtpId");//一级图片ID
+        String zdid = request.getParameter("zdid");
+        String pname = request.getParameter("pname");
+        String pdescribe = request.getParameter("pdescribe");
+
+        try {
+            ywYjtpService.doUpdatePic(id, zdid, pname, pdescribe);
+            map.put("msg", "保存成功！");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("msg", e.getMessage());
+        }
+
+        return map;
+
+    }
+
+
     /**
      * 删除方法，支持单记录和多记录删除
      *
@@ -200,12 +226,12 @@ public class PictureController {
         try {
             view = new ModelAndView();
             dataList = new ArrayList<>();
-            List<YwZdgl> ywZdglList = new ArrayList<>();
+//            List<YwZdgl> ywZdglList = new ArrayList<>();
             dataList = ywYjtpService.getYjtpDataById(id);//根据id获取数据
-            ywZdglList = ywZdglService.getZdglData("");
+//            ywZdglList = ywZdglService.getZdglData("");
             view.setViewName("pic/pic_edit");
             map.put("dataList", dataList);
-            map.put("ywZdglList", ywZdglList);
+//            map.put("ywZdglList", ywZdglList);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -231,6 +257,7 @@ public class PictureController {
         String yjid = request.getParameter("id");
         String zdid = request.getParameter("zdid");
         String pname = request.getParameter("pname");
+        String sname = request.getParameter("sname");
         try {
             dataList2 = new ArrayList<>();
             dataList2 = ywEjtpService.getEjtpData(yjid, zdid);
@@ -241,7 +268,7 @@ public class PictureController {
             map.put("pname", pname);
 //            二级图片页面显示路径
             map.put("headPath", relativePath.split("/")[1] + "/" + ejtpPath + "/");
-
+            map.put("sname", sname);
         } catch (Exception e) {
             e.printStackTrace();
         }

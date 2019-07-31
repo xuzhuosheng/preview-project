@@ -26,17 +26,22 @@
 </head>
 <body>
 <div class="page-container">
-    <input type="text" th:value="${dataList[0].zdid}" style="display: none" id="zdidInp"/>
 
-    <form class="form form-horizontal" id="form-article-add" action="" method="post" enctype="multipart/form-data">
+    <form class="form form-horizontal" id="form-article-add" action="" method="post">
+
+        <input type="text" th:value="${dataList[0].zdid}" style="display: none" name="zdid" id="zdidInp"/>
+        <input type="text" th:value="${dataList[0].id}" style="display: none" name="yjtpId" id="yjtpIdInp"/>
+
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>终端名称：</label>
             <div class="formControls col-xs-8 col-sm-9">
-				<span class="select-box">
-				<select name="zdid" class="select">
-                    <option th:each="yw,zdgl:${ywZdglList}" th:value="${yw.id}" th:text="${yw.sname}"></option>
-				</select>
-				</span>
+                <input type="text" class="input-text" readonly th:value="${dataList[0].sname}" placeholder="" id="sname"
+                       name="sname">
+                <!--<span class="select-box">-->
+                <!--<select name="zdid" class="select">-->
+                <!--<option th:each="yw,zdgl:${ywZdglList}" th:value="${yw.id}" th:text="${yw.sname}"></option>-->
+                <!--</select>-->
+                <!--</span>-->
             </div>
         </div>
         <div class="row cl">
@@ -54,42 +59,12 @@
             </div>
         </div>
 
-        <!--<div class="row cl">
-            <label class="form-label col-xs-4 col-sm-2">图片上传：</label>
-            <div class="formControls col-xs-8 col-sm-9">
-                <div class="uploader-list-container">
-                    <div class="queueList">
-                        <div id="dndArea" class="placeholder">
-                            <div id="filePicker-2"></div>
-                            &lt;!&ndash;<p>或将照片拖到这里，单次最多可选300张</p>&ndash;&gt;
-                        </div>
-                    </div>
-                    &lt;!&ndash;<div class="statusBar" style="display:none;">
-                        <div class="progress"><span class="text">0%</span> <span class="percentage"></span></div>
-                        <div class="info"></div>
-                        <div class="btns">
-                            <div id="filePicker2"></div>
-                            <div class="uploadBtn">开始上传</div>
-                        </div>
-                    </div>&ndash;&gt;
-                </div>
-            </div>
-        </div>-->
-
-        <!-- <div class="row cl">
-             <label class="form-label col-xs-4 col-sm-2">图片上传：</label>
-             <div class="formControls col-xs-8 col-sm-9">
-                 <input type="file" name="file"/>
-             </div>
-         </div>-->
 
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
                 <button onClick="submitForm();" class="btn btn-primary radius" type="button"><i
                         class="Hui-iconfont">&#xe632;</i> 提交
                 </button>
-                <!--<button onClick="article_save();" class="btn btn-secondary radius" type="button"><i class="Hui-iconfont">&#xe632;</i> 保存草稿</button>-->
-                <!--<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>-->
             </div>
         </div>
     </form>
@@ -109,20 +84,25 @@
 <script type="text/javascript" th:src="@{hui/lib/jquery.validation/1.14.0/messages_zh.js}"></script>
 <script type="text/javascript" th:src="@{lib/webuploader/0.1.5/webuploader.min.js}"></script>
 <script type="text/javascript">
-    $(function () {
-        var zdid = $("#zdidInp").val();
-        if (!zdid == "") {
-            $("select[name='zdid']").val(zdid);
-        }
-    })
+    // $(function () {
+    //     var zdid = $("#zdidInp").val();
+    //     if (!zdid == "") {
+    //         $("select[name='zdid']").val(zdid);
+    //     }
+    // })
 
     function submitForm() {
         var formData = new FormData($("#form-article-add")[0]);
         // var formData = $("#form-article-add").serialize();
+        if(formData.get("pname")=="" ||formData.get("pname") ==null)
+        {
+            alert("图片标题不能为空！");
+            return;
+        }
         $.ajax({
                 type: 'post',
                 data: formData,
-                url: 'doSavePic',
+                url: 'doUpdatePic',
                 async: false,
                 cache: false,
                 contentType: false,
