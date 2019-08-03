@@ -108,16 +108,18 @@ public class YwAutoPicController {
                                      HttpSession session) {
         map = new ModelMap();
 
-        String zdid = request.getParameter("zdid");
+//        String zdid = request.getParameter("zdid");
         try {
             if (multipartFile.length > 0) {
 
                 for(int i = 0; i < multipartFile.length; i++) {
                     if (multipartFile[i].getSize() > 0) {
                         String imgFileName = multipartFile[i].getOriginalFilename();
+                        String type = multipartFile[i].getContentType().split("/")[1];
                         Date date = new Date();
                         long time = date.getTime();
-                        String newImgName = time + "_" + imgFileName;
+                        String newImgName =
+                                time + "_" + String.valueOf((int) (Math.random() * 100 * 100 * 100) + 1) + "." + type;
                         String path = uploadFilePath + "/" + autoPic;
                         File targetFile = new File(path, newImgName);
                         if (!targetFile.exists()) {

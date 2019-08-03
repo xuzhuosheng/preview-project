@@ -146,9 +146,11 @@ public class PictureController {
 //            上传图片
             if (multipartFile.getSize() > 0) {
                 String imgFileName = multipartFile.getOriginalFilename();
+                String type = multipartFile.getContentType().split("/")[1];
+
                 Date date = new Date();
                 long time = date.getTime();
-                newImgName = time + "_" + imgFileName;
+                newImgName = time + "_" + String.valueOf((int) (Math.random() * 100 * 100 * 100) + 1) + "." + type;
                 String path = uploadFilePath + yjtpPath + "/";
                 File targetFile = new File(path, newImgName);
                 multipartFile.transferTo(targetFile);
@@ -320,9 +322,12 @@ public class PictureController {
                 for(int i = 0; i < multipartFile.length; i++) {
                     if (multipartFile[i].getSize() > 0) {
                         String imgFileName = multipartFile[i].getOriginalFilename();
+                        String type = multipartFile[i].getContentType().split("/")[1];
+
                         Date date = new Date();
                         long time = date.getTime();
-                        String newImgName = time + "_" + imgFileName;
+                        String newImgName =
+                                time + "_" + String.valueOf((int) (Math.random() * 100 * 100 * 100) + 1) + "." + type;
 //                        二级图片路径
                         String path = uploadFilePath + ejtpPath + "/" + "yjtp_" + zdid + "_" + yjtpId + "/";
                         File targetFile = new File(path, newImgName);
