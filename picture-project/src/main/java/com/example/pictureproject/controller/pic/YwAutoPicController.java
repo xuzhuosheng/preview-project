@@ -57,16 +57,18 @@ public class YwAutoPicController {
     public ModelAndView toAutoPicIndex(HttpServletRequest request, ModelMap map) {
         view = new ModelAndView();
         String zdid = request.getParameter("zdid");
+        String sname = request.getParameter("sname");
         String searchContent = request.getParameter("searchContent");
         try {
 
             dataList = new ArrayList<>();
             dataList = ywAutoPicService.getAutoPicData(zdid, searchContent);
-            ywZdglList = ywZdglService.getZdglData("");
-            map.put("ywZdglList", ywZdglList);
+//            ywZdglList = ywZdglService.getZdglData("");
+//            map.put("ywZdglList", ywZdglList);
             map.put("dataList", dataList);
             map.put("searchContent", searchContent);
             map.put("zdid", zdid);
+            map.put("sname", sname);
             map.put("headPath", relativePath.split("/")[1] + "/" + autoPic);
             view.setViewName("auto/pic_auto_index");
         } catch (Exception e) {
@@ -79,12 +81,17 @@ public class YwAutoPicController {
 
 
     @RequestMapping (value = "toAutoPicAdd")
-    public ModelAndView toAutoPicAdd(ModelMap map) {
+    public ModelAndView toAutoPicAdd(ModelMap map, HttpServletRequest request) {
         view = new ModelAndView();
+        String zdid = request.getParameter("zdid");
+        String sname = request.getParameter("sname");
         try {
-            List<YwZdgl> ywZdglList = new ArrayList<>();
-            ywZdglList = ywZdglService.getZdglData("");
-            map.put("ywZdglList", ywZdglList);
+//            List<YwZdgl> ywZdglList = new ArrayList<>();
+//            ywZdglList = ywZdglService.getZdglData("");
+//            map.put("ywZdglList", ywZdglList);
+            map.put("zdid", zdid);
+            map.put("sname", sname);
+
         } catch (Exception e) {
             e.printStackTrace();
             map.put("msg", e.getMessage());

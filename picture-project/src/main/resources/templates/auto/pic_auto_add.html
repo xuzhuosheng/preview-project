@@ -31,15 +31,18 @@
         <!--<input type="text" style="display: none" th:value="${zdid}" id="zdidInp" name="zdid">-->
         <!--<input type="text" style="display: none" th:value="${yjtpId}" id="yjtpIdInp" name="yjid">-->
         <input type="text" style="display: none" value="" id="uploadFileNameInp" name="uploadFileName">
-
+        <input type="text" th:value="${zdid}" name="zdid" style="display:none;">
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>终端名称：</label>
             <div class="formControls col-xs-8 col-sm-9">
-				<span class="select-box">
-				<select name="zdid" class="select">
-                    <option th:each="yw,zdgl:${ywZdglList}" th:value="${yw.id}" th:text="${yw.sname}"></option>
-				</select>
-				</span>
+                <input type="text" class="input-text" th:value="${sname}" readonly placeholder=""
+                       id="sname" name="sname">
+
+                <!--<span class="select-box">-->
+                <!--<select name="zdid" class="select">-->
+                <!--<option th:each="yw,zdgl:${ywZdglList}" th:value="${yw.id}" th:text="${yw.sname}"></option>-->
+                <!--</select>-->
+                <!--</span>-->
             </div>
         </div>
 

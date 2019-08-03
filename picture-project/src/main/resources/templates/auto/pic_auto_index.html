@@ -25,25 +25,34 @@
     <link href="lib/lightbox2/2.8.1/css/lightbox.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 图片管理 <span
-        class="c-gray en">&gt;</span>自动轮播图片<a class="btn btn-success radius r"
-                                              style="line-height:1.6em;margin-top:3px"
-                                              href="javascript:location.replace(location.href);"
-                                              id="reflashAId"
-                                              title="刷新"><i
-        class="Hui-iconfont">&#xe68f;</i></a></nav>
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span>
+    <span th:text="'终端:'+${sname}"></span>
+    <span class="c-gray en">&gt;</span>自动轮播图片<a class="btn btn-success radius r"
+                                                style="line-height:1.6em;margin-top:3px;margin-left: 5px"
+                                                href="javascript:location.replace(location.href);"
+                                                id="reflashAId"
+                                                title="刷新"><i
+        class="Hui-iconfont">&#xe68f;</i></a>
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;"
+       href="toZdglIndex" title="返回终端"
+       id=""><i class="Hui-iconfont">&#xe644;</i></a>
+</nav>
 <!--<span th:text="${pname}"></span>-->
 <div class="page-container">
-    <input type="text" th:value="${zdid}" style="display: none" id="zdidInp"/>
 
     <div class="text-c">
         <form action="toAutoPicIndex" method="post">
-        <span class="select-box" style="width:150px">
-			<select class="select" name="zdid" size="1">
-				<option value="0">全部</option>
-                <option th:each="yw,zdgl:${ywZdglList}" th:value="${yw.id}" th:text="${yw.sname}"></option>
-			</select>
-        </span>
+            <input type="text" th:value="${zdid}" style="display: none" id="zdidInp" name="zdid"/>
+            <input type="text" th:value="${sname}" style="display: none" id="snameInp"/>
+
+            <!--<span class="select-box" style="width:150px">-->
+            <!--<select class="select" name="zdid" size="1">-->
+            <!--<option value="0">全部</option>-->
+            <!--<option th:each="yw,zdgl:${ywZdglList}" th:value="${yw.id}" th:text="${yw.sname}"></option>-->
+            <!--</select>-->
+            <!--</span>-->
 
             <input type="text" name="searchContent" id="" placeholder="请输入搜索内容。。。"
                    th:value="${searchContent==''?'':searchContent}" style="width:250px" class="input-text">
@@ -87,19 +96,21 @@
         $(".portfolio-area li").Huihover();
     });
 
-    $(function () {
-        var zdid = $("#zdidInp").val();
-        if (!zdid == "") {
-            $("select[name='zdid']").val(zdid);
-        }
-    })
+    // $(function () {
+    //     var zdid = $("#zdidInp").val();
+    //     if (!zdid == "") {
+    //         $("select[name='zdid']").val(zdid);
+    //     }
+    // })
 
     /*图片-添加*/
     function picture_add(title, url) {
+        var zdid = $("#zdidInp").val();
+        var sname = $("#snameInp").val();
         var index = layer.open({
                 type: 2,
                 title: title,
-                content: url
+                content: url + "?zdid=" + zdid + "&sname=" + sname
             })
         ;
         layer.full(index);

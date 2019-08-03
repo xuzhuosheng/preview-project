@@ -55,7 +55,7 @@
 
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-                <input class="btn btn-primary radius" type="button" onclick="submitForm()"
+                <input class="btn btn-primary radius" type="button" onclick="submitForm()" id="submitBtn"
                        value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
             </div>
         </div>
@@ -78,7 +78,7 @@
 
     function submitForm() {
 
-        // var formData = $("#form-member-add").serialize();
+        $("#submitBtn").attr("disabled");
         var formData = new FormData($("#form-member-add")[0]);
         $.ajax({
                 type: 'post',

@@ -62,7 +62,7 @@
 
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
-                <button onClick="submitForm();" class="btn btn-primary radius" type="button"><i
+                <button onClick="submitForm();" class="btn btn-primary radius" type="button" id="submitbtn" ><i
                         class="Hui-iconfont">&#xe632;</i> 提交
                 </button>
             </div>
@@ -92,10 +92,10 @@
     // })
 
     function submitForm() {
+        $("#submitbtn").attr("disabled");
         var formData = new FormData($("#form-article-add")[0]);
         // var formData = $("#form-article-add").serialize();
-        if(formData.get("pname")=="" ||formData.get("pname") ==null)
-        {
+        if (formData.get("pname") == "" || formData.get("pname") == null) {
             alert("图片标题不能为空！");
             return;
         }

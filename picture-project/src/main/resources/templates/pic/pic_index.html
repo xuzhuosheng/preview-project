@@ -42,6 +42,7 @@
     <div class="text-c">
         <form action="toPicIndex" method="post">
             <input type="text" th:value="${zdid}" name="zdid" style="display: none" id="zdidInp"/>
+            <input type="text" th:value="${sname}" name="sname" style="display: none" id="snameInp"/>
 
 
             <input type="text" name="searchContent" id="" placeholder="请输入搜索内容。。。"
@@ -55,6 +56,8 @@
                 class="Hui-iconfont">&#xe600;</i> 添加图片</a>
         <a class="btn btn-primary radius" onclick="picture_show('二级图库','toPicShow','','','2')" href="javascript:;"><i
                 class="Hui-iconfont">&#xe600;</i> 编辑二级图库</a>
+<!--<a class="btn btn-primary radius" onclick="autoPic_show('自动轮播','toAutoPicIndex','','')" href="javascript:;"><i-->
+        <!--class="Hui-iconfont">&#xe600;</i> 编辑自动轮播图片</a>-->
 
     </span> <span class="r">共有数据：<strong><span
             th:text="${dataList.size()}"></span> </strong> 条</span></div>
@@ -74,7 +77,7 @@
             </thead>
             <tbody>
             <tr class="text-c" th:each="plan:${dataList}" th:id="${plan.id}" th:value="${plan.zdid}"
-                ondblclick="picture_show('二级图库','toPicShow','',this,'1')" title="双击记录查看二级图库" th:name="${plan.pname}"
+                ondblclick="picture_show('二级图库','toPicShow','',this,'1')" title="双击编辑二级图库" th:name="${plan.pname}"
                 th:sname="${plan.sname}">
                 <td><input name="checkboxInp" type="checkbox" th:value="${plan.id}" th:pname="${plan.pname}"
                            th:zdid="${plan.zdid}" th:sname="${plan.sname}"></td>
@@ -112,12 +115,12 @@
 <script type="text/javascript" th:src="@{hui/lib/laypage/1.2/laypage.js}"></script>
 <script type="text/javascript">
 
-    $(function () {
-        var zdid = $("#zdidInp").val();
-        if (!zdid == "") {
-            $("select[name='zdid']").val(zdid);
-        }
-    })
+    // $(function () {
+    //     var zdid = $("#zdidInp").val();
+    //     if (!zdid == "") {
+    //         $("select[name='zdid']").val(zdid);
+    //     }
+    // })
 
     $('.table-sort').dataTable({
         "aaSorting": [1, "desc"],//默认第几个排序
@@ -139,11 +142,37 @@
 
     /*图片-添加*/
     function picture_add(title, url) {
+        var zdid = $("#zdidInp").val();
         var index = layer.open({
             type: 2,
             title: title,
-            content: url
+            content: url + "?zdid=" + zdid
         });
+        layer.full(index);
+    }
+
+    function autoPic_show(title, url, id, obj, type) {
+        // var obj2 = $("input[name='checkboxInp']:checked");
+
+
+        // if (obj2.length == 0) {
+        //     alert("请选择记录进行编辑！");
+        //     return;
+        // }
+        // if (obj2.length > 1) {
+        //     alert("请选择一条记录进行编辑！")
+        //     return;
+        // }
+
+        var zdid = $("#zdidInp").val();
+        var sname = $("#snameInp").val();
+
+        var index = layer.open({
+                type: 2,
+                title: title,
+                content: url + "?zdid=" + zdid + "&sname=" + sname
+            })
+        ;
         layer.full(index);
     }
 

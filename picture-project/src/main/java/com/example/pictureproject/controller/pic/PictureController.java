@@ -101,18 +101,19 @@ public class PictureController {
      * @return
      */
     @RequestMapping ("toPicAdd")
-    public ModelAndView toPicAdd(ModelMap map) {
+    public ModelAndView toPicAdd(ModelMap map, HttpServletRequest request) {
         view = new ModelAndView();
-
+        String zdid = request.getParameter("zdid");
         try {
             //            获取终端，页面作为select
             List<YwZdgl> ywZdglList = new ArrayList<>();
-            ywZdglList = ywZdglService.getZdglData("");
+            ywZdglList = ywZdglService.getZdglDataById(zdid);
             map.put("ywZdglList", ywZdglList);
             view.setViewName("pic/pic_add");
 
         } catch (Exception e) {
             e.printStackTrace();
+            map.put("msg", e.getMessage());
         }
 
         return view;
