@@ -69,7 +69,7 @@ public class YwAutoPicController {
             map.put("searchContent", searchContent);
             map.put("zdid", zdid);
             map.put("sname", sname);
-            map.put("headPath", relativePath.split("/")[1] + "/" + autoPic);
+            map.put("headPath", relativePath.split("/")[1] + "/" + autoPic + "/" + "zd_" + zdid);
             view.setViewName("auto/pic_auto_index");
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,7 +108,7 @@ public class YwAutoPicController {
                                      HttpSession session) {
         map = new ModelMap();
 
-//        String zdid = request.getParameter("zdid");
+        String zdid = request.getParameter("zdid");
         try {
             if (multipartFile.length > 0) {
 
@@ -120,7 +120,7 @@ public class YwAutoPicController {
                         long time = date.getTime();
                         String newImgName =
                                 time + "_" + String.valueOf((int) (Math.random() * 100 * 100 * 100) + 1) + "." + type;
-                        String path = uploadFilePath + "/" + autoPic;
+                        String path = uploadFilePath + "/" + autoPic + "/" + "zd_" + zdid;
                         File targetFile = new File(path, newImgName);
                         if (!targetFile.exists()) {
                             targetFile.mkdirs();
