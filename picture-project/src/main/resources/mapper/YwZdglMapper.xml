@@ -6,7 +6,7 @@
     <select id="getZdglData" resultType="com.example.pictureproject.entity.YwZdgl">
         select * from yw_zdgl
         <where>
-            1=1
+            zt='1'
             <if test="searchContent!='' and searchContent!=null">
                 and (
                 sname like concat(concat('%',#{searchContent}),'%')
@@ -15,7 +15,7 @@
                 )
             </if>
         </where>
-        order  by  createtime desc
+        order by createtime desc
     </select>
 
     <select id="getZdglDataById" resultType="com.example.pictureproject.entity.YwZdgl">
@@ -29,26 +29,37 @@
     <insert id="insertZdgl">
         insert into yw_zdgl
         (
-        sname,sdescribe,surl,createtime,createby
+        sname,sdescribe,surl,createtime,createby,zt
         )values (
-        #{sname},#{sdescribe},#{surl},now(),#{username}
+        #{sname},#{sdescribe},#{surl},now(),#{username},1
         )
     </insert>
 
-    <delete id="delZdgl" parameterType="java.util.List">
-        delete from yw_zdgl
+    <!--<delete id="delZdgl" parameterType="java.util.List">-->
+    <!--delete from yw_zdgl-->
+    <!--<where>-->
+    <!--id in-->
+    <!--<foreach collection="idList" item="id" open="(" close=")" separator=",">-->
+    <!--#{id}-->
+    <!--</foreach>-->
+    <!--</where>-->
+    <!--</delete>-->
+
+    <update id="delZdgl">
+        update yw_zdgl set zt='0'
         <where>
             id in
             <foreach collection="idList" item="id" open="(" close=")" separator=",">
                 #{id}
             </foreach>
         </where>
-    </delete>
+    </update>
+
 
     <update id="UpdateZdgl">
         update yw_zdgl
         <set>
-            sname=#{sname},sdescribe=#{sdescribe},surl=#{surl}
+            sname=#{sname},sdescribe=#{sdescribe}
         </set>
 
         <where>

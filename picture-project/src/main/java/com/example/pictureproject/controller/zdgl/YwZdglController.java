@@ -6,6 +6,7 @@ import com.example.pictureproject.entity.YwZdgl;
 import com.example.pictureproject.service.YwZdglService;
 import com.sun.net.httpserver.HttpsConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -18,10 +19,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Controller
 public class YwZdglController {
+
+    @Value ("${previewPort}")
+    private String previewPort;
 
     private ModelAndView view;
     private ModelMap map;
@@ -31,6 +36,8 @@ public class YwZdglController {
 
     @RequestMapping (value = "toZdglIndex")
     public ModelAndView toZdglIndex(ModelMap map, HttpServletRequest request) {
+        String ServerUrl = request.getLocalAddr();
+
         view = new ModelAndView();
         String searchContent = request.getParameter("searchContent");
         try {
@@ -38,6 +45,7 @@ public class YwZdglController {
             dataList = ywZdglService.getZdglData(searchContent);
             map.put("dataList", dataList);
             map.put("searchContent", searchContent);
+
             view.setViewName("zdgl/zdgl_index");
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,8 +56,14 @@ public class YwZdglController {
     }
 
     @RequestMapping ("toZdglAdd")
-    public ModelAndView toZdglAdd() {
+    public ModelAndView toZdglAdd(HttpServletRequest request, ModelMap map) {
+        String ServerUrl = request.getLocalAddr();
+
+        Date date = new Date();
+        Long time = date.getTime();
         view = new ModelAndView();
+        map.put("serverUrl",
+                "http://" + ServerUrl + ":" + previewPort + "/" + "toIndex?serverId=" + time + "_" + String.valueOf((int) (Math.random() * 100 * 100 * 100) + 1));
         view.setViewName("zdgl/zdgl_add");
         return view;
     }

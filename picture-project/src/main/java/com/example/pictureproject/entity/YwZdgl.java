@@ -13,6 +13,7 @@ public class YwZdgl implements Serializable {
     private String surl;
     private String createby;
     private Date createtime;
+    private String zt;
     private String bz;
 
     private String createtimeStr;
@@ -84,5 +85,13 @@ public class YwZdgl implements Serializable {
 
     public void setBz(String bz) {
         this.bz = bz;
+    }
+
+    public String getZt() {
+        return zt;
+    }
+
+    public void setZt(String zt) {
+        this.zt = zt;
     }
 }

@@ -55,11 +55,19 @@ public class PreviewController {
     @RequestMapping ("/toIndex")
     public ModelAndView toIndex(HttpServletRequest request, ModelMap map) {
 
-        String ipAddress = request.getRemoteAddr();
+//        System.out.println(request.getLocalAddr());
+//
+//         String ipAddress = request.getRemoteAddr();
+        String fullUrl = request.getRequestURL().toString()+"?"+request.getQueryString();
+//        String queryL = request.getQueryString();
+//        System.out.println(surl + "?" + queryL);
+
+        String serverId = request.getParameter("serverId");
+
         ModelAndView view = new ModelAndView();
         try {
             YwZdgl zdgl = new YwZdgl();
-            zdgl = ywZdglService.getZdidByUrl(ipAddress);
+            zdgl = ywZdglService.getZdidByUrl(fullUrl);
 
             if (zdgl != null) {
                 List<YwYjtp> ywYjtpList = new ArrayList<>();
@@ -91,7 +99,7 @@ public class PreviewController {
             if (ywAutoPicList.size() > 0) {
                 StringBuffer s = new StringBuffer();
                 for(int i = 0; i < ywAutoPicList.size(); i++) {
-                    s.append(relativePath.split("/")[1] + "/" + autoPic + "/" + ywAutoPicList.get(i).getPath() +
+                    s.append(relativePath.split("/")[1] + "/" + autoPic + "/" + "zd_" + zdid + "/" + ywAutoPicList.get(i).getPath() +
                             ",");
                 }
                 ywAutoPicStr = s.substring(0, s.length() - 1);

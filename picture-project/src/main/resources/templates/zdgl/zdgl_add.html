@@ -45,7 +45,7 @@
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>URL：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="" id="surl" name="surl">
+                <input type="text" class="input-text" th:value="${serverUrl}" readonly placeholder="" id="surl" name="surl">
             </div>
         </div>
 
@@ -93,8 +93,8 @@
         if (formData.get('surl') == "" || formData.get('surl') == null) {
             alert("请输入URL！");
             return;
-        } else if (formData.get('surl').length > 30) {
-            alert("URL不能超出30个字符！");
+        } else if (formData.get('surl').length > 300) {
+            alert("URL不能超出300个字符！");
             return;
         }
         $.ajax({
