@@ -9,6 +9,12 @@
             1=1
             and yjid=#{yjid}
             and zdid=#{zdid}
+            <if test="searchContent!=null and searchContent!=''">
+                and (
+                pname like concat(concat('%',#{searchContent}),'%')
+                or pdescribe like concat(concat('%',#{searchContent}),'%')
+                )
+            </if>
         </where>
         order by createtime desc
     </select>

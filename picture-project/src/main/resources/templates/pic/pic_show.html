@@ -28,14 +28,35 @@
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> <span th:text="'终端：'+${sname}"></span> <span
         class="c-gray en">&gt;</span> <span th:text="'一级图库：'+${pname}"></span> <a class="btn btn-success radius r"
                                                                                   style="line-height:1.6em;margin-top:3px"
-                                                                                  href="javascript:location.replace(location.href);"
+                                                                                  th:href="@{'toPicShow?zdid='+${zdid}+'&sname='+${sname}+'&pname='+${pname}+'&id='+${yjtpId} }"
                                                                                   id="reflashAId"
                                                                                   title="刷新"><i
         class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
 
-    <input type="text" th:value="${yjtpId}" id="yjtpIdInp" style="display: none">
-    <input type="text" th:value="${zdid}" id="zdidInp" style="display: none">
+
+    <!--<input type="text" th:value="${zdid}" id="zdidInp" style="display: none">-->
+
+    <div class="text-c">
+        <form action="toPicShow" method="post">
+            <input type="text" th:value="${zdid}" style="display: none" id="zdidInp" name="zdid"/>
+            <input type="text" th:value="${sname}" style="display: none" id="snameInp" name="sname"/>
+            <input type="text" th:value="${yjtpId}" id="yjtpIdInp" style="display: none" name="id">
+            <input type="text" th:value="${pname}" id="pnameInp" style="display: none" name="pname">
+
+            <!--<span class="select-box" style="width:150px">-->
+            <!--<select class="select" name="zdid" size="1">-->
+            <!--<option value="0">全部</option>-->
+            <!--<option th:each="yw,zdgl:${ywZdglList}" th:value="${yw.id}" th:text="${yw.sname}"></option>-->
+            <!--</select>-->
+            <!--</span>-->
+
+            <input type="text" name="searchContent" id="" placeholder="请输入搜索内容。。。"
+                   th:value="${searchContent==''?'':searchContent}" style="width:250px" class="input-text">
+            <button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+        </form>
+    </div>
+
 
     <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="l"> <a href="javascript:;"
                                                                 onclick="picture_add('添加二级图片','toShowAdd')"

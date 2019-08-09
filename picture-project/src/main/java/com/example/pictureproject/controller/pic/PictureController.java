@@ -261,14 +261,16 @@ public class PictureController {
         String zdid = request.getParameter("zdid");
         String pname = request.getParameter("pname");
         String sname = request.getParameter("sname");
+        String searchContent = request.getParameter("searchContent");
         try {
             dataList2 = new ArrayList<>();
-            dataList2 = ywEjtpService.getEjtpData(yjid, zdid);
+            dataList2 = ywEjtpService.getEjtpData(yjid, zdid, searchContent);
             view.setViewName("pic/pic_show");
             map.put("dataList2", dataList2);
             map.put("yjtpId", yjid);
             map.put("zdid", zdid);
             map.put("pname", pname);
+            map.put("searchContent", searchContent);
 //            二级图片页面显示路径
             map.put("headPath", relativePath.split("/")[1] + "/" + ejtpPath + "/");
             map.put("sname", sname);

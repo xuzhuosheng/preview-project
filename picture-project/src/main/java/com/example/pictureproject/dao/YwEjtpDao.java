@@ -9,7 +9,8 @@ import java.util.List;
 
 @Repository ("ywEjtpDao")
 public interface YwEjtpDao {
-    List<YwEjtp> getEjtpData(@Param ("yjid") String yjid, @Param ("zdid") String zdid);
+    List<YwEjtp> getEjtpData(@Param ("yjid") String yjid, @Param ("zdid") String zdid,
+                             @Param ("searchContent") String searchContent);
 
     void doSaveEjtp(@Param ("yjid") String yjid, @Param ("zdid") String zdid,
                     @Param ("pname") String pname, @Param ("pdescribe") String pdescribe,

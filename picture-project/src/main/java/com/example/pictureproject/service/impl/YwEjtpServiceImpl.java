@@ -18,9 +18,9 @@ public class YwEjtpServiceImpl implements YwEjtpService {
     private List<YwEjtp> dataList2;
 
     @Override
-    public List<YwEjtp> getEjtpData(String yjid, String zdid) {
+    public List<YwEjtp> getEjtpData(String yjid, String zdid,String searchContent) {
         dataList2 = new ArrayList<>();
-        dataList2 = ywEjtpDao.getEjtpData(yjid, zdid);
+        dataList2 = ywEjtpDao.getEjtpData(yjid, zdid,searchContent);
         return dataList2;
     }
 
